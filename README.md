@@ -4,7 +4,7 @@ An automatic dataset generator for 2D/3D detection and segment mission based on 
 
 ## Result
 
-![output.gif](G:\Carla_Recorder\videos\output.gif)
+![output.gif](output.gif)
 
 ## Requirement
 
