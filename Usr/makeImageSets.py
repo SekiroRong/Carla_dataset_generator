@@ -8,20 +8,21 @@
 import os
 import random
 import numpy as np
-video_path = r'G:\PP\carla\training'
+from config import kitti_root
+video_path = kitti_root + r'\training'
 
 images_dir = os.path.join(video_path, 'image_2')
-txt_dir = r'G:\PP\carla\ImageSets\train.txt'
-txt_dir2 = r'G:\PP\carla\ImageSets\test.txt'
-txt_dir3 = r'G:\PP\carla\ImageSets\trainval.txt'
-txt_dir4 = r'G:\PP\carla\ImageSets\val.txt'
+txt_dir = kitti_root + r'\ImageSets\train.txt'
+txt_dir2 = kitti_root + r'\ImageSets\test.txt'
+txt_dir3 = kitti_root + r'\ImageSets\trainval.txt'
+txt_dir4 = kitti_root + r'\ImageSets\val.txt'
 
 def makeImageSets(renew = True):
     mode = 'w' if renew else 'a'
     images_filenames = sorted(
         [os.path.join(images_dir, filename) for filename in os.listdir(images_dir)]
     )
-
+    # print(images_filenames)
     length = len(images_filenames)
     train_length = int(0.8 * length)
     val_length = length - train_length
@@ -38,28 +39,27 @@ def makeImageSets(renew = True):
     with open(txt_dir,mode) as f:
         for img in train_filenames:
         # for img in images_filenames:
-            img_name = img[29:-4]
-            # print(img_name)
+            img_name = img.replace(images_dir,'')[1:-4]
             f.write(img_name)
             f.write('\n')
 
     # with open(txt_dir2,mode) as f:
     #     for img in images_filenames:
-    #         img_name = img[29:].strip('.jpg')
+    #         img_name = img.replace(images_dir,'')[1:-4]
     #         # print(img_name)
     #         f.write(img_name)
     #         f.write('\n')
 
     with open(txt_dir3,mode) as f:
         for img in images_filenames:
-            img_name = img[29:-4]
+            img_name = img.replace(images_dir,'')[1:-4]
             # print(img_name)
             f.write(img_name)
             f.write('\n')
 
     with open(txt_dir4,mode) as f:
         for img in val_filenames:
-            img_name = img[29:-4]
+            img_name = img.replace(images_dir,'')[1:-4]
             # print(img_name)
             f.write(img_name)
             f.write('\n')

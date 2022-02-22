@@ -29,16 +29,6 @@ colors = [(255,0,0),(0,255,0),(0,0,255),(255,255,0),(255,0,255),(0,255,255),(128
           (128,0,128),(0,128,128),(200,0,0),(0,200,0),(0,0,200),(200,200,0),(200,0,200),(0,200,200),(100,0,0),
           (0,100,0),(0,0,100),(100,100,0),(100,0,100),(0,100,100),(255,215,0),(255,215,0),(255,215,0)]
 ply_data = []
-# with open(ply_path + r"\1_004000.ply", "r") as f:
-#     l_num = 0
-#     for line in f.readlines():
-#         l_num += 1
-#         if l_num > 8:
-#             line = line.strip('\n')  #去掉列表中每一个元素的换行符
-#             ply_data.append(line.split(' '))
-#
-# ply_data = np.array(ply_data)
-# print(ply_data.shape)
 
 def compute(x,y,z):
     dis = math.sqrt(x*x+y*y+z*z)
@@ -56,14 +46,6 @@ def compute_verse(rgb_x,rgb_y):
     b = (rgb_y - z_offset)*1.0/z_scale
     x = b/focal_length
     c = (rgb_x - y_offset)*1.0/y_scale
-    # z = 1
-    # y = (rgb_x - y_offset)/y_scale
-    # s2 = -y/z
-    # z2 = z*z
-    # s1 = z2 * (s2*s2+1) / (focal_length*focal_length)
-    # x2 = (y*y + z*z) / s1
-    # x = math.sqrt(x2)
-    # # print('s1',s1)
     try:
         y = c/b
     except ZeroDivisionError:
@@ -75,7 +57,7 @@ def distance_O(point1,point2):
     return point1-point2
 
 
-# ply转鸟瞰图
+# lidar to bev map
 def ply2bev(ply_data):
     global bev_size
     img = np.zeros((bev_size, bev_size), np.uint8)
@@ -90,7 +72,7 @@ def ply2bev(ply_data):
     # return cv2.flip(img,-1)
     return img
 
-# ply转前视图
+# lidar to front view
 def ply2fv(path,img):
     # rgb = rgb_path + '/' + path
     ply = path.replace('.jpg','.ply')

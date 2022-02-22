@@ -9,6 +9,8 @@ import numpy as np
 import os
 from tqdm import tqdm
 np.set_printoptions(suppress=True)
+
+# Transfrom the ply file into Kitti form(bin file)
 def parse_ply(path):
     ply_data = []
     with open(path, "r") as f:
@@ -24,10 +26,6 @@ def ply2bin(path):
     lidar = parse_ply(path)
     lidar = lidar[:, [1, 2, 0, 3]]
     lidar[:,0] *= -1
-    # lidar = np.around(
-    #     lidar,  # numpy数组或列表
-    #     decimals=3  # 保留几位小数
-    # )
     velodyne_file_new = path[0:-3] + 'bin'
     lidar.tofile(velodyne_file_new)
     os.remove(path)

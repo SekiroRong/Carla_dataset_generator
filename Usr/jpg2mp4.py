@@ -15,43 +15,23 @@ from generateSegLabel import ll2fv
 from pos2kitti import pos2kitti
 from makeImageSets import makeImageSets
 
-from config import status, kitti
+from config import status, kitti, txt_path, rgb_path, semantic_path, lidar_path, save_path
+from config import save_3dbbox_path, save_laneline_path, save_drivearea_path, save_img_path
+from config import round
 
-txt_path = r"G:\Carla_Recorder\Position_Recorder" + '/' + status
-rgb_path = r"G:\Carla_Recorder\Cam_Recorder" + '/' + status
-semantic_path = r"G:\Carla_Recorder\semantic_Recorder" + '/' + status
-lidar_path = r"G:\Carla_Recorder\Lidar_Recorder" + '/' + status
-save_path = r"G:\Carla_Recorder\videos"
-
-if kitti:
-    rgb_path = r'G:\PP\carla\training\image_2'
-    lidar_path = r'G:\PP\carla\training\velodyne'
-
-Lidar_Project = True
-Semantic_Project = True
+# Lidar_Project = True
+# Semantic_Project = True
 BBox_3D_Project = True
 LaneLine_Project = False
 
 
+save_Image_path = False
 
+save2dataset = True # default = True
 
-save_Tmage_path = False
+save_video = True # default = True
 
-save2dataset = True
-
-save_video = True
-
-save_3dbbox_path = r"G:\Carla_Dataset\3Dbbox" + '/' + status
-save_laneline_path = r"G:\Carla_Dataset\LaneLine" + '/' + status
-save_drivearea_path = r"G:\Carla_Dataset\DriveableArea" + '/' + status
-save_img_path = r"G:\Carla_Dataset\Image" + '/' + status + "\images.txt"
-
-if kitti:
-    save_3dbbox_path = r'G:\Carla_Recorder\tmp'
-
-round = 'm'
-
-Renew = True
+Renew = True # default = True
 
 
 def resize(img_array, align_mode):
@@ -84,24 +64,12 @@ def images_to_video(path):
 
     with open(save_img_path,'a') as f:
         for filename in tqdm(glob.glob(path + '/*.jpg')):
-            if kitti:
-                tmp = filename[29:]
-            else:
-                tmp = filename[37:]
-            # print(tmp)
-            # while 1:
-            #     a= 1
-            if tmp[0] == round:
-                if save_Tmage_path:
+            file = filename.replace(path, '')[1:]
+            if file[0] == round:
+                if save_Image_path:
                     f.write(filename)
                     f.write('\n')
-                if kitti:
-                    file = filename[29:]
-                else:
-                    file = filename[37:]
                 print(file)
-                # while 1:
-                #     a= 1
                 try:
                     img = cv2.imread(filename)
                 except:
@@ -139,7 +107,7 @@ def images_to_video(path):
     # img_array, size = resize(img_array, 'largest')
     if save_video:
         fps = 5
-        out = cv2.VideoWriter(save_path + '/' + status + '_' + round + '.mp4', cv2.VideoWriter_fourcc(*'DIVX'), fps, (1280,720))
+        out = cv2.VideoWriter(save_path + '/' + status + '_' + round + '.mp4', cv2.VideoWriter_fourcc(*'mp4v'), fps, (1280,720))
 
         for i in tqdm(range(len(img_array))):
             out.write(img_array[i])

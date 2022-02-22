@@ -18,17 +18,8 @@ scale = 1
 bev_size = 300*scale
 hero_id = '24'
 
-from config import kitti
+from config import kitti,txt_path,rgb_path,semantic_path,depth_path
 
-
-txt_file = r"G:\Carla_Recorder\Position_Recorder" + '/' + status
-
-rgb_path = r'G:\Carla_Recorder\Cam_Recorder' + '/' + status
-semantic_path = r"G:\Carla_Recorder\semantic_Recorder" + '/' + status
-depth_path = r"G:\Carla_Recorder\Depth_Recorder" + '/' + status
-
-if kitti:
-    rgb_path = r'G:\PP\carla\training\image_2'
 colors = [(255,0,0),(0,255,0),(0,0,255),(255,255,0),(255,0,255),(128,0,0),(0,128,0),(0,0,128),(128,128,0),
           (128,0,128),(0,128,128),(0,128,128),(0,0,205),(0,0,128),(255,215,0),(255,215,0),(255,215,0),(255,215,0),
           (255,215,0),(255,215,0),(255,215,0),(255,215,0),(255,215,0),(255,215,0),(255,215,0),(255,215,0)]
@@ -61,46 +52,30 @@ def containAllRects(rects):
 
 
 def bbox3dTo2d_plus(sem,points,type):
-    # print(sem.shape)
     b2d = [max(min(points[0][0], points[1][0], points[2][0], points[3][0]),0),
            max(min(points[4][1], points[5][1], points[6][1], points[7][1]),0),
            min(max(points[4][0], points[5][0], points[6][0], points[7][0]),1279),
            min(max(points[0][1], points[1][1], points[2][1], points[4][1]),719)]
-    # print(b2d)
     if b2d[1] == b2d[3] or b2d[0] == b2d[2]:
         return [0, 0, 0, 0]
     sem_seg = sem[int(b2d[1]):int(b2d[3]),int(b2d[0]):int(b2d[2])]
 
-    # cv2.imshow("img", sem)
-    # cv2.waitKey(0)
-    # cv2.imshow("img", sem_seg)
-    # cv2.waitKey(0)
     w,h = int(b2d[3]) - int(b2d[1]),int(b2d[2]) - int(b2d[0])
-    # print('w,h',w,h)
 
-    # x_l,x_r = 0,0
-
-    # print(sem_seg.shape)
     if type == 'Car':
         sem_rects = findVehicleBoundingRect_plus(sem_seg)
     else:
         sem_rects = findWalkerBoundingRect_plus(sem_seg)
     if len(sem_rects):
         sem_rect = containAllRects(sem_rects)
-        # sem_rect = sem_rects[0]
-        # print(sem_rects)
-        # print(sem_rect)
         x_l = sem_rect[0]
         x_r = h - sem_rect[2]
-        # print('x_l,x_r',x_l,x_r)
         if not (b2d[0] == 0 or b2d[0] + h == 1279):
             if x_l == 0:
                 x_l = x_r
             elif x_r == 0:
                 x_r = x_l
         final_b2d = [b2d[0] + x_l, b2d[1] + sem_rect[1], b2d[0] + h - x_r,b2d[1] + sem_rect[3]]
-        # print(final_b2d)
-        # print(' ')
         return final_b2d
     else:
         return [0,0,0,0]
@@ -120,8 +95,7 @@ def pos2bev(pos_data):
         extent = [scale*float(vehicle[4]),scale*float(vehicle[5]),scale*float(vehicle[6])]
         bbox =[(mid_x + round(location[0] + extent[0]), mid_y + round(location[1] + extent[1])), (mid_x + round(location[0] - extent[0]), mid_y + round(location[1] + extent[1])),
                (mid_x + round(location[0] - extent[0]), mid_y + round(location[1] - extent[1])), (mid_x + round(location[0] + extent[0]), mid_y + round(location[1] - extent[1]))]
-        # img[round(location[0])][round(location[1])]=255
-        # print(id)
+
         if id == hero_id:
             color = colors[2]
             size = 1
@@ -143,8 +117,6 @@ def _compute_space(point):
            max(min(point[4][1], point[5][1], point[6][1], point[7][1]),0),
            min(max(point[4][0], point[5][0], point[6][0], point[7][0]),1279),
            min(max(point[0][1], point[1][1], point[2][1], point[4][1]),719)]
-    # space1 = abs(point[6][0] - point[0][0]) * abs(point[6][1] - point[0][1])
-    # space2 = abs(point[7][0] - point[1][0]) * abs(point[7][1] - point[1][1])
     space = (b2d[2]-b2d[0]) * (b2d[3]-b2d[1])
     return space
 
@@ -168,23 +140,9 @@ def iou_2d_plus(points1, points2):
     '''
         box [x1,y1,x2,y2]   分别是两对角定点的坐标
     '''
-    # box1 = [min(points1[0][0],points1[1][0],points1[2][0],points1[3][0]),
-    #         min(points1[4][1],points1[5][1],points1[6][1],points1[7][1]),
-    #         max(points1[4][0],points1[5][0],points1[6][0],points1[7][0]),
-    #         max(points1[0][1],points1[1][1],points1[2][1],points1[4][1])]
-    #
-    # box2 = [min(points2[0][0],points2[1][0],points2[2][0],points2[3][0]),
-    #         min(points2[4][1],points2[5][1],points2[6][1],points2[7][1]),
-    #         max(points2[4][0],points2[5][0],points2[6][0],points2[7][0]),
-    #         max(points2[0][1],points2[1][1],points2[2][1],points2[3][1])]
     box1 = points1
     box2 = points2
 
-    # print(points1)
-    # print(points2)
-    #
-    # print(box1)
-    # print(box2)
     area1 = (box1[2] - box1[0]) * (box1[3] - box1[1])
     area2 = (box2[2] - box2[0]) * (box2[3] - box2[1])
     area_sum = area1 + area2
@@ -208,10 +166,6 @@ def iou_2d_plus(points1, points2):
     return inter_area * 1.0 / (area_sum - inter_area), scale * inter_area * 1.0 / (small_area)
 
 def isInsight(sem_img,point):
-    # print(type(sem_img[0][0]))
-    # print(sem_img[0][0])
-    # print(Vehicles)
-
     x,y = int((point[0][0]+point[6][0])/2),int((point[0][1]+point[6][1])/2)
     if x<0 or x >1279:
         return False
@@ -223,10 +177,7 @@ def isInsight(sem_img,point):
             # space2 = abs(point[7][0] - point[1][0]) * abs(point[7][1] - point[1][1])
             # 高度
             height = max(abs(point[4][1] - point[0][1]),abs(point[6][1] - point[2][1]))
-            # print(space)
-            # print(max(space1,space2))
             if _compute_space(point) > 100*100 and height > 100:
-                # print(height)
                 return True
             else:
                 return False
@@ -239,15 +190,13 @@ def midPoint(A,C):
     return (0.5*(A[0]+C[0]),0.5*(A[1]+C[1]))
 def pos2fv(path,img, save = False, save_path = ''):
     depth_img = parse_depth_img(path)
-    # rgb = rgb_path + '/' + path
     txt = path.replace('.jpg', '.txt')
-    txt = txt_file + '/' + txt
+    txt = txt_path + '/' + txt
     pos_data = []
     with open(txt, "r") as f:
         for line in f.readlines():
             line = line.strip('\n')  # 去掉列表中每一个元素的换行符
             pos_data.append(line.split(' '))
-    # img = cv2.imread(rgb,cv2.IMREAD_COLOR)
 
     sem = path.replace('.txt','.jpg')
     sem = semantic_path + '/' + sem
@@ -256,13 +205,11 @@ def pos2fv(path,img, save = False, save_path = ''):
     vehicle_rects = findVehicleBoundingRect(sem_img)
     walker_rects = findWalkerBoundingRect(sem_img)
     rects_occupied = [[] for i in range(len(vehicle_rects))]
-    # print('Frame:')
 
     if save == True:
         txt = path.replace('.jpg', '.txt')
         save_txt = save_path + '/' + txt
 
-    # print(' ')
     with open(save_txt,'w') as f:
         # print(len(vehicle_rects))
         for index, actor in enumerate(pos_data):
@@ -278,7 +225,7 @@ def pos2fv(path,img, save = False, save_path = ''):
                 continue
             mid = midPoint(A, C)
             h = float(bbox[1]) - float(bbox[13])
-            if actor[0] == '0': # 我tmd真的是搞不懂了 为什么行人和车辆的x轴是反的
+            if actor[0] == '0':
                 x, y, z = mid[0], h/2 - 1, mid[1]
             else:
                 x, y, z = mid[0], float(bbox[1]) - 0.5 * h, mid[1]
@@ -287,8 +234,7 @@ def pos2fv(path,img, save = False, save_path = ''):
                 y *= -1
             if x == 0:
                 continue
-            # print(actor[0], y)
-            # print(x, y, z, h)
+
             mid, dis = compute(z, x, y)
             if z < 0 or z > 55:
                 continue
@@ -323,10 +269,6 @@ def pos2fv(path,img, save = False, save_path = ''):
             d_img = cv2.imread(d_p)
 
             d_img = cv2.cvtColor(d_img, cv2.COLOR_BGR2GRAY)
-            # print(d_img.shape)
-            # print(d_img[mid[1]][mid[0]], dis)
-            # print(dis - 4*d_img[mid[1]][mid[0]])
-            # print(4*d_img[mid[1]][mid[0]], z)
             dis_bias = z - 4*d_img[mid[1]][mid[0]]
             if actor[0] == '0':
                 if dis_bias > 4.5 or dis_bias < -2:
@@ -352,7 +294,8 @@ def pos2fv(path,img, save = False, save_path = ''):
                     if _isInside(vehicle_rects[i],point):
                         rects_occupied[i].append(index)
 
-                rects_occupied[i] = list(set(rects_occupied[i])) # 待测试
+                rects_occupied[i] = list(set(rects_occupied[i]))
+                # Deprecated
                         # if len(rects_occupied[i]) == 0:
                         #     rects_occupied[i].append(index)
                         #     # cur = bbox3dTo2d_plus(sem_img, point, type='Car')
@@ -475,6 +418,9 @@ def pos2fv(path,img, save = False, save_path = ''):
 
                         f.write('\n')
                         break
+
+                    # Deprecated
+
                         # if len(rects_occupied[i]) == 0:
                         #     rects_occupied[i].append(index)
                         # else:
@@ -548,43 +494,4 @@ def pos2fv(path,img, save = False, save_path = ''):
                         f.write(' ')
 
                     f.write('\n')
-
-
-    # for vehicle in pos_data:
-    #     point = []
-    #     for i in range(8):
-    #         point.append((int(scale*int(vehicle[2*i+0])),int(scale*int(vehicle[2*i+1]))))
-    #
-    #     if isInsight(sem_img,point):
-    #         cv2.line(img, point[0], point[1], (255, 255, 255),2)
-    #         cv2.line(img, point[1], point[2], (255, 255, 255),2)
-    #         cv2.line(img, point[2], point[3], (255, 255, 255),2)
-    #         cv2.line(img, point[3], point[0], (255, 255, 255),2)
-    #         cv2.line(img, point[4], point[5], (255, 255, 255),2)
-    #         cv2.line(img, point[5], point[6], (255, 255, 255),2)
-    #         cv2.line(img, point[6], point[7], (255, 255, 255),2)
-    #         cv2.line(img, point[7], point[4], (255, 255, 255),2)
-    #         cv2.line(img, point[0], point[4], (255, 255, 255),2)
-    #         cv2.line(img, point[1], point[5], (255, 255, 255),2)
-    #         cv2.line(img, point[2], point[6], (255, 255, 255),2)
-    #         cv2.line(img, point[3], point[7], (255, 255, 255),2)
-    # if save:
-    #     f.close()
     return img
-
-# pos_data = []
-# with open(txt_file + r"\11_24_007120.txt", "r") as f:
-#     for line in f.readlines():
-#         line = line.strip('\n')  #去掉列表中每一个元素的换行符
-#         pos_data.append(line.split(' '))
-#
-# print(pos_data)
-#
-# jpg_path = rgb_path + r"\11_007120.jpg"
-# # img = cv2.imread(rgb_path,cv2.IMREAD_COLOR)
-#
-# img = pos2fv(pos_data,jpg_path)
-#
-# cv2.imshow('bev15.jpg',img)
-# while 1:
-#     a = 1

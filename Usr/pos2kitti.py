@@ -82,10 +82,10 @@ def pos2kitti(path):
             f.write('\n')
 
 
-filenames = sorted(
-    [filename for filename in os.listdir(pos_path)]
-)
-
-for filename in tqdm(filenames):
-    pos2kitti(filename)
+# filenames = sorted(
+#     [filename for filename in os.listdir(pos_path)]
+# )
+#
+# for filename in tqdm(filenames):
+#     pos2kitti(filename)
 # pos2kitti(pos_path)
