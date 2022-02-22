@@ -5,15 +5,16 @@
 # @Software : PyCharm
 # @Contact : sekirorong@gmail.com
 # @github : https://github.com/SekiroRong
+import os
 
 # ---------------------Generator Parameters------------------------
 status = 'train' # train/test/val
 
-round = 'a'
+round = 'a' # Avoiding the generated data conflicting
 
 carla_map = 'Town01' # Town01,02,03,04,05,06,07,10 available  Town03有上下坡！
 
-weather_index = 0
+weather_index = 0 # change the weather when simulating
 
 # ------------------------Path----------------------------------------
 
@@ -41,10 +42,28 @@ if kitti:
     label_path = kitti_training + r'\label_2'
     paintedVelodyne_path = kitti_training + r'\paintedVelodyne'
 
+# ----deprecated------
 save_3dbbox_path = r"G:\Carla_Dataset\3Dbbox" + '/' + status
 save_laneline_path = r"G:\Carla_Dataset\LaneLine" + '/' + status
 save_drivearea_path = r"G:\Carla_Dataset\DriveableArea" + '/' + status
 save_img_path = r"G:\Carla_Dataset\Image" + '/' + status + "\images.txt"
+# --------------------
 
 if kitti:
     save_3dbbox_path = Carla_Recorder_dir + r'\tmp'
+
+
+def mkdir(path):
+    folder = os.path.exists(path)
+    if not folder:
+        os.makedirs(path)
+
+mkdir(rgb_path)
+mkdir(lidar_path)
+mkdir(semantic2_path)
+mkdir(label_path)
+mkdir(semantic_path)
+mkdir(txt_path)
+mkdir(depth_path)
+mkdir(save_path)
+
