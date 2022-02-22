@@ -24,6 +24,8 @@ pip install  requirements.txt
 
 The project is based on **carla-0.9.12**, which can be download here: [CARLA 0.9.12 Release | CARLA Simulator](http://carla.org/2021/08/02/release-0.9.12/)
 
+And this version of carla seems require **python 3.7**.
+
 ## Get Start
 
 All script you need to run is in the Usr folder, and you can set most of the parameter in config.py
@@ -42,7 +44,7 @@ All script you need to run is in the Usr folder, and you can set most of the par
 
 1. Run the jpg2mp4.py
 
-## Ountput Structure
+## Output Structure
 
 The generator is designed to produce a kitti-like dataset for now.
 
