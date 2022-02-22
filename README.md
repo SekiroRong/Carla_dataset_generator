@@ -12,8 +12,46 @@ An automatic dataset generator for 2D/3D detection and segment mission based on 
 pip install  requirements.txt
 ```
 
+## Get Start
+
+All script you need to run is in the Usr folder.
+
+### Generate Raw Data
+
+1. Run the automatic_control.py
+
+2. Then you should manully check the images which have been generated automatically in order to make the dataset clean, because the Carla Simulator makes some mistakes from time to time.
+
+3. Run the kittiSynchronize.py to make sure that the dataset is generated normally.
+
+### Turn Raw Data into Train Data
+
+1. Run the jpg2mp4.py
+
+
+
+## Ountput Structure
+
+The generator is designed to produce a kitti-like dataset for now.
+
+```
+carla
+├─ImageSets
+├─testing
+│  ├─image_2
+│  ├─label_2
+│  ├─semantic
+│  └─velodyne
+├─training
+│  ├─image_2
+│  ├─label_2
+│  ├─semantic
+│  └─velodyne
+```
+
 ## Architecture
 
+```
 carla  
 ├─carla
 │  │  requirements.txt
@@ -95,7 +133,7 @@ carla
     │  test_connection.py
     │  vehicle_physics_tester.py
     │  
-
+```
 
 ## Contact
 
