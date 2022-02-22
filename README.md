@@ -2,6 +2,16 @@
 
 An automatic dataset generator for 2D/3D detection and segment mission based on Carla Simulator.
 
+## Feature
+
+- [x] Support Kitti-like dataset
+
+- [x] Support 2D/3D detection and segment mission
+
+- [ ] Support other dataset
+
+- [ ] Suport other mission
+
 ## Result
 
 ![output.gif](output.gif)
@@ -12,23 +22,25 @@ An automatic dataset generator for 2D/3D detection and segment mission based on 
 pip install  requirements.txt
 ```
 
+The project is based on **carla-0.9.12**, which can be download here: [CARLA 0.9.12 Release | CARLA Simulator](http://carla.org/2021/08/02/release-0.9.12/)
+
 ## Get Start
 
-All script you need to run is in the Usr folder.
+All script you need to run is in the Usr folder, and you can set most of the parameter in config.py
 
 ### Generate Raw Data
 
-1. Run the automatic_control.py
+1. Run the Carla Simulator First
 
-2. Then you should manully check the images which have been generated automatically in order to make the dataset clean, because the Carla Simulator makes some mistakes from time to time.
+2. Run the automatic_control.py
 
-3. Run the kittiSynchronize.py to make sure that the dataset is generated normally.
+3. Then you should manually check the images which have been generated automatically in order to make the dataset clean, because the Carla Simulator makes some mistakes from time to time.
 
-### Turn Raw Data into Train Data
+4. Run the kittiSynchronize.py to make sure that all parts of the dataset is generated synchronously.
+
+### Turn Raw Data into Train Data(Kitti format)
 
 1. Run the jpg2mp4.py
-
-
 
 ## Ountput Structure
 
@@ -52,7 +64,7 @@ carla
 ## Architecture
 
 ```
-carla  
+arla  
 ├─carla
 │  │  requirements.txt
 │  │  scene_layout.py
@@ -66,13 +78,9 @@ carla
 │  │  │  │  behavior_types.py
 │  │  │  │  controller.py
 │  │  │  │  global_route_planner.py
-│  │  │  │  local_planner.py
-│  │  │  │  __init__.py
-│  │  │          
+│  │  │  │  local_planner.py         
 │  │  ├─tools
-│  │  │  │  misc.py
-│  │  │  │  __init__.py
-│          
+│  │  │  │  misc.py     
 ├─examples
 │  │  automatic_control.py
 │  │  client_bounding_boxes.py
@@ -98,8 +106,7 @@ carla
 │  │  tutorial_replay.py
 │  │  vehicle_gallery.py
 │  │  vehicle_physics.py
-│  │  visualize_multiple_sensors.py
-│          
+│  │  visualize_multiple_sensors.py         
 ├─Usr
 │  │  automatic_control.py
 │  │  config.py
@@ -118,8 +125,7 @@ carla
 │  │  ply2bev.py
 │  │  ply2bin.py
 │  │  pos2kitti.py
-│  │  position2bev.py
-│          
+│  │  position2bev.py         
 └─util
     │  check_collisions_substepping.py
     │  check_lidar_bb.py
@@ -132,7 +138,7 @@ carla
     │  requirements.txt
     │  test_connection.py
     │  vehicle_physics_tester.py
-    │  
+
 ```
 
 ## Contact
