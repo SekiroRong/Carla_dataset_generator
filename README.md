@@ -85,28 +85,7 @@ arla
 │  │  automatic_control.py
 │  │  client_bounding_boxes.py
 │  │  dynamic_weather.py
-│  │  generate_traffic.py
-│  │  lidar_to_camera.py
-│  │  manual_control.py
-│  │  manual_control_carsim.py
-│  │  manual_control_chrono.py
-│  │  manual_control_steeringwheel.py
-│  │  no_rendering_mode.py
-│  │  open3d_lidar.py
-│  │  requirements.txt
-│  │  sensor_synchronization.py
-│  │  show_recorder_actors_blocked.py
-│  │  show_recorder_collisions.py
-│  │  show_recorder_file_info.py
-│  │  start_recording.py
-│  │  start_replaying.py
-│  │  synchronous_mode.py
-│  │  tutorial.py
-│  │  tutorial_ego.py
-│  │  tutorial_replay.py
-│  │  vehicle_gallery.py
-│  │  vehicle_physics.py
-│  │  visualize_multiple_sensors.py         
+│  │  requirements.txt       
 ├─Usr
 │  │  automatic_control.py
 │  │  config.py
@@ -119,8 +98,7 @@ arla
 │  │  myDelete.py
 │  │  myRecordTest.py
 │  │  mySynchronize.py
-│  │  newSynchronize.py
-│  │  open3d_test.py
+│  │  kittiSynchronize.py
 │  │  parseLLtxt.py
 │  │  ply2bev.py
 │  │  ply2bin.py
@@ -138,7 +116,6 @@ arla
     │  requirements.txt
     │  test_connection.py
     │  vehicle_physics_tester.py
-
 ```
 
 ## Contact
