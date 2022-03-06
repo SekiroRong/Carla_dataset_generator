@@ -20,7 +20,7 @@ def midPoint(A,C):
 
 
 
-def pos2kitti(path):
+def pos2kitti(path, real_kitti=False):
     pos = pos_path + '/' + path
     save = save_path + '/' + path
     with open(pos,'r') as f:
@@ -66,6 +66,8 @@ def pos2kitti(path):
         for label in labels:
             f.write(str(label[0]))
             f.write(' ')
+            if real_kitti: # just take place
+                f.write('0.00 0 0.00 0.00 0.00 0.00 0.00 ')
             f.write(str(format(label[1], '.4f')))
             f.write(' ')
             f.write(str(format(label[2], '.4f')))
@@ -81,11 +83,51 @@ def pos2kitti(path):
             f.write(str(format(label[7], '.4f')))
             f.write('\n')
 
+# turn kitti_like_format 2 real_kitti_format
+def real_kitti(filename):
+    with open(os.path.join(label_path,filename), 'r') as f:
+        lines = f.readlines()
+        objects = []
+        for line in lines:
+            object = [] # type  truncated  occluded  alpha  bbox(4 values/dont care)  dimensions(3 values)
+                        # location(3 values)  rotation_y
+            line.strip('\n')
+            data = line.split(' ')
+            if data[0] == '0':
+                object.append('Car')
+            else:
+                object.append('Pedestrian')
 
-# filenames = sorted(
-#     [filename for filename in os.listdir(pos_path)]
-# )
-#
-# for filename in tqdm(filenames):
-#     pos2kitti(filename)
-# pos2kitti(pos_path)
+            object.append('0.00') # truncated(dont care)
+            object.append('0') # occluded(dont care)
+            object.append('0.00') # alpha(dont care)
+            object.append('0.00 0.00 0.00 0.00')  # bbox(dont care)
+            object.append(data[1])
+            object.append(data[2])
+            object.append(data[3])
+            object.append(data[4])
+            object.append(data[5])
+            object.append(data[6])
+            object.append(data[7])
+
+            objects.append(object)
+
+    with open(os.path.join(label_path_kitti,filename), 'w') as f:
+        for object in objects:
+            for i in range(12):
+                f.write(object[i])
+                if not i == 11:
+                #     f.write('\n')
+                # else:
+                    f.write(' ')
+
+
+label_path = r'G:\PP\carla\training\label_2'
+label_path_kitti = r'G:\PP\carla\training\label_2_kitti'
+
+filenames = sorted(
+    [filename for filename in os.listdir(label_path)]
+)
+
+for filename in tqdm(filenames):
+    real_kitti(filename)
