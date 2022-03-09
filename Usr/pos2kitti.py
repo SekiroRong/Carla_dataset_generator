@@ -20,6 +20,7 @@ def midPoint(A,C):
 
 
 
+# -----------deprecated--------------------
 def pos2kitti(path, real_kitti=False):
     pos = pos_path + '/' + path
     save = save_path + '/' + path
@@ -33,6 +34,9 @@ def pos2kitti(path, real_kitti=False):
                 cat_id = 0
             else:
                 cat_id = 1
+
+            bbox2d = data[17:21]
+            # print(bbox2d)
             bbox = data[21:]
             A = (float(bbox[0]), float(bbox[2]))
             B = (float(bbox[3]), float(bbox[5]))
@@ -40,11 +44,21 @@ def pos2kitti(path, real_kitti=False):
             # print(bbox)
             # print(A[1]-B[1]) # 判断方向
             l, w, h = _length(A,B),_length(B,C), float(bbox[1])-float(bbox[13])
+            if cat_id == 1:
+                l += 0.2
+                w += 0.2
             mid = midPoint(A,C)
-            if cat_id == 0:
-                x, y, z = mid[0], h - 1, mid[1]
-            else:
-                x, y, z = mid[0], float(bbox[1]), mid[1]
+            x, y, z = mid[0], -float(bbox[1]), mid[1]
+            # if cat_id == 0:
+            #     if real_kitti:
+            #         x, y, z = mid[0], -1, mid[1]
+            #     else:
+            #         x, y, z = mid[0], h - 1, mid[1]
+            # else:
+            #     if real_kitti:
+            #         x, y, z = mid[0], float(bbox[13]), mid[1]
+            #     else:
+            #         x, y, z = mid[0], float(bbox[1]), mid[1]
             # print(A,B,C)
             # print(l, w, h)
             # print(x,y,z)
@@ -58,7 +72,7 @@ def pos2kitti(path, real_kitti=False):
             # 还差个yaw角
 
             # print(' ')
-            object_label = [cat_id, z, x, y, h, w, l, ry]
+            object_label = [cat_id, z, x, y, h, w, l, ry, bbox2d[0], bbox2d[1], bbox2d[2], bbox2d[3]]
             # print(object_label)
             labels.append(object_label)
 
@@ -66,8 +80,8 @@ def pos2kitti(path, real_kitti=False):
         for label in labels:
             f.write(str(label[0]))
             f.write(' ')
-            if real_kitti: # just take place
-                f.write('0.00 0 0.00 0.00 0.00 0.00 0.00 ')
+            # if real_kitti: # just take place
+            #     f.write('0.00 0 0.00 0.00 0.00 0.00 0.00 ')
             f.write(str(format(label[1], '.4f')))
             f.write(' ')
             f.write(str(format(label[2], '.4f')))
@@ -81,6 +95,14 @@ def pos2kitti(path, real_kitti=False):
             f.write(str(format(label[6], '.4f')))
             f.write(' ')
             f.write(str(format(label[7], '.4f')))
+            f.write(' ')
+            f.write(label[8])
+            f.write(' ')
+            f.write(label[9])
+            f.write(' ')
+            f.write(label[10])
+            f.write(' ')
+            f.write(label[11])
             f.write('\n')
 
 # turn kitti_like_format 2 real_kitti_format
@@ -101,33 +123,37 @@ def real_kitti(filename):
             object.append('0.00') # truncated(dont care)
             object.append('0') # occluded(dont care)
             object.append('0.00') # alpha(dont care)
-            object.append('0.00 0.00 0.00 0.00')  # bbox(dont care)
-            object.append(data[1])
-            object.append(data[2])
-            object.append(data[3])
-            object.append(data[4])
-            object.append(data[5])
-            object.append(data[6])
+            object.append(data[8]) # bbox(dont care)
+            object.append(data[9])
+            object.append(data[10])
+            object.append(data[11][:-1])
+            # object.append('0.00 0.00 0.00 0.00')  # bbox(dont care)
+            object.append(data[4]) #h
+            object.append(data[5]) #w
+            object.append(data[6]) #l
+            object.append(data[2]) #x
+            object.append(data[3]) #y
+            object.append(data[1])  # z
             object.append(data[7])
 
             objects.append(object)
 
     with open(os.path.join(label_path_kitti,filename), 'w') as f:
         for object in objects:
-            for i in range(12):
+            for i in range(15):
                 f.write(object[i])
-                if not i == 11:
-                #     f.write('\n')
-                # else:
+                if i == 14:
+                    f.write('\n')
+                else:
                     f.write(' ')
 
 
 label_path = r'G:\PP\carla\training\label_2'
 label_path_kitti = r'G:\PP\carla\training\label_2_kitti'
-
-filenames = sorted(
-    [filename for filename in os.listdir(label_path)]
-)
-
-for filename in tqdm(filenames):
-    real_kitti(filename)
+#
+# filenames = sorted(
+#     [filename for filename in os.listdir(label_path)]
+# )
+#
+# for filename in tqdm(filenames):
+#     real_kitti(filename)

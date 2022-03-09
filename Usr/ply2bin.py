@@ -24,8 +24,8 @@ def parse_ply(path):
 
 def ply2bin(path):
     lidar = parse_ply(path)
-    lidar = lidar[:, [1, 2, 0, 3]]
-    lidar[:,0] *= -1
+    # lidar = lidar[:, [1, 2, 0, 3]]
+    # lidar[:,0] *= -1
     velodyne_file_new = path[0:-3] + 'bin'
     lidar.tofile(velodyne_file_new)
     os.remove(path)

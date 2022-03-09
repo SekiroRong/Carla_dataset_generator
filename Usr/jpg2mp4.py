@@ -8,14 +8,15 @@
 import cv2
 import glob, os
 from tqdm import tqdm
+import shutil
 
 from ply2bev import ply2fv
 from position2bev import pos2fv
 from generateSegLabel import ll2fv
-from pos2kitti import pos2kitti
+from pos2kitti_new import pos2kitti
 from makeImageSets import makeImageSets
 
-from config import status, kitti, txt_path, rgb_path, semantic_path, lidar_path, save_path
+from config import status, kitti, txt_path, rgb_path, semantic_path, lidar_path, save_path, tmp_path
 from config import save_3dbbox_path, save_laneline_path, save_drivearea_path, save_img_path
 from config import round
 
@@ -115,7 +116,10 @@ def images_to_video(path):
 
 
 def main():
-    print(rgb_path)
+    # print(rgb_path)
+    shutil.rmtree(tmp_path)
+    os.mkdir(tmp_path)
+
     images_to_video(rgb_path)
 
 

@@ -10,7 +10,7 @@ import os
 # ---------------------Generator Parameters------------------------
 status = 'train' # train/test/val
 
-round = 'a' # Avoiding the generated data conflicting
+round = 'i' # Avoiding the generated data conflicting
 
 carla_map = 'Town01' # Town01,02,03,04,05,06,07,10 available  Town03有上下坡！
 
@@ -20,7 +20,11 @@ weather_index = 0 # change the weather when simulating
 
 kitti = True
 kitti_root = r'G:\PP\carla'
-kitti_training = kitti_root + r'\training'
+
+if status == 'test':
+    kitti_training = kitti_root + r'\testing'
+else:
+    kitti_training = kitti_root + r'\training'
 
 Carla_Recorder_dir = r'G:\Carla_Recorder'
 
@@ -32,6 +36,7 @@ depth_path = Carla_Recorder_dir + '\Depth_Recorder' + '/' + status
 semantic2_path = Carla_Recorder_dir + '\semantic2_Recorder' + '/' + status
 laneline_file = r"G:\Carla_Recorder\Laneline_Recorder" + '/' + status # Deprecated
 save_path = Carla_Recorder_dir + r'\videos'
+tmp_path = Carla_Recorder_dir + r'\tmp'
 
 recorder_dir = Carla_Recorder_dir + r'\recording01.log'
 

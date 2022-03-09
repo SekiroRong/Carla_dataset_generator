@@ -9,6 +9,8 @@ import os
 import random
 import numpy as np
 from config import kitti_root
+
+# kitti_root = r'G:\carla'
 video_path = kitti_root + r'\training'
 
 images_dir = os.path.join(video_path, 'image_2')
@@ -64,4 +66,4 @@ def makeImageSets(renew = True):
             f.write(img_name)
             f.write('\n')
 
-# makeImageSets()
+makeImageSets()
