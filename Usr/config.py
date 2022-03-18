@@ -10,12 +10,14 @@ import os
 # ---------------------Generator Parameters------------------------
 status = 'train' # train/test/val
 
-round = 'i' # Avoiding the generated data conflicting
+round = '5' # Avoiding the generated data conflicting
 
-carla_map = 'Town01' # Town01,02,03,04,05,06,07,10 available  Town03有上下坡！
+carla_map = 'Town05' # Town01,02,03,04,05,10HD available  Town03有上下坡！ Recommend Town05
 
 weather_index = 0 # change the weather when simulating
 
+Ratio_of_vehicles = 0.1 # Ratio of vehicles/walkers to spawn points
+Ratio_of_walkers = 0.7 # Ratio_of_vehicles + Ratio_of_walkers is recommended to less than 0.8
 # ------------------------Path----------------------------------------
 
 kitti = True
@@ -25,6 +27,8 @@ if status == 'test':
     kitti_training = kitti_root + r'\testing'
 else:
     kitti_training = kitti_root + r'\training'
+
+# kitti_training = kitti_root + r'\testing'
 
 Carla_Recorder_dir = r'G:\Carla_Recorder'
 

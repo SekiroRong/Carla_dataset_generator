@@ -147,8 +147,18 @@ def real_kitti(filename):
                 else:
                     f.write(' ')
 
+import numpy as np
 
-label_path = r'G:\PP\carla\training\label_2'
+def fix_bin(path):
+    Points = np.fromfile(path, dtype=np.float32).reshape((-1, 4))
+    print(Points)
+    while 1:
+        a = 1
+    # lidar = Points[:, [1, 2, 0, 3]]
+    # lidar[:, 0] *= -1
+    # lidar.tofile(path)
+
+label_path = r'G:\PP\carla\training\velodyne'
 label_path_kitti = r'G:\PP\carla\training\label_2_kitti'
 #
 # filenames = sorted(
@@ -156,4 +166,7 @@ label_path_kitti = r'G:\PP\carla\training\label_2_kitti'
 # )
 #
 # for filename in tqdm(filenames):
-#     real_kitti(filename)
+#     # print(filename[0])
+#     if filename[0] == 'c':
+#         fix_bin(os.path.join(label_path,filename))
+    # real_kitti(filename)

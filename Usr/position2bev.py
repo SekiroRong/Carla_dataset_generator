@@ -244,10 +244,13 @@ def pos2fv(path,img, save = False, save_path = ''):
             #     # print(midPoint(A, C))
             #     # print('skip_distance')
             #     continue
-
+            if mid[1] >720:
+                continue
             if mid[0] <0 or mid[0] > 1219:
-                cv2.putText(img, "skip_boundry", mid, cv2.FONT_HERSHEY_SIMPLEX, 1,
-                            (0, 0, 255), 1)
+                try:
+                    cv2.putText(img, "skip_boundry", mid, cv2.FONT_HERSHEY_SIMPLEX, 1,(0, 0, 255), 1)
+                except IndexError:
+                    continue
                 # print('skip_boundry')
                 continue
             # # print(sem_img[mid[1]][mid[0]][0])

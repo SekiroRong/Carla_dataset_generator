@@ -83,6 +83,7 @@ else:
     dynamic_weather = False
 
 from Usr.config import rgb_path, semantic_path, lidar_path, depth_path, txt_path, recorder_dir, semantic2_path, laneline_file
+from Usr.config import Ratio_of_vehicles, Ratio_of_walkers
 
 semantic_type = 4 # 语义分割摄像头种类
 
@@ -898,8 +899,8 @@ def game_loop(args):
             number_of_spawn_points = len(spawn_points)
             print('number_of_spawn_points:' + str(number_of_spawn_points))
 
-            number_of_vehicles = int(0.4 * number_of_spawn_points)
-            number_of_walkers = int(0.3 * number_of_spawn_points)
+            number_of_vehicles = int(Ratio_of_vehicles * number_of_spawn_points)
+            number_of_walkers = int(Ratio_of_walkers * number_of_spawn_points)
             # If too many vehicles or walkers are generated, it will lead to spawn points conflict and
             # traffic jams when running, so leave a little margin.
 
