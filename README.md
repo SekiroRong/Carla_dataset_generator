@@ -120,6 +120,15 @@ arla
     │  vehicle_physics_tester.py
 ```
 
+## Citation
+
+@misc{Super-Fast-Accurate-3D-Object-Detection-PyTorch,
+  author =       {Nguyen Mau Dung},
+  title =        {{Super-Fast-Accurate-3D-Object-Detection-PyTorch}},
+  howpublished = {\url{https://github.com/maudzung/Super-Fast-Accurate-3D-Object-Detection}},
+  year =         {2020}
+}
+
 ## Contact
 
 If you think this work is useful, please give me a star!  
