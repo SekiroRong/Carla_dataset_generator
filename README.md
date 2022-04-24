@@ -122,12 +122,14 @@ arla
 
 ## Citation
 
-@misc{Super-Fast-Accurate-3D-Object-Detection-PyTorch,
-  author =       {Nguyen Mau Dung},
-  title =        {{Super-Fast-Accurate-3D-Object-Detection-PyTorch}},
-  howpublished = {\url{https://github.com/maudzung/Super-Fast-Accurate-3D-Object-Detection}},
-  year =         {2020}
+```bash
+@misc{Carla_dataset_generator,
+  author =       {Yu Rong, Mingbo Zhao},
+  title =        {{Carla_dataset_generator}},
+  howpublished = {\url{https://github.com/SekiroRong/Carla_dataset_generator}},
+  year =         {2021}
 }
+```
 
 ## Contact
 
